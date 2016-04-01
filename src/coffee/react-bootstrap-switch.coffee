@@ -36,6 +36,7 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     this.disabled(!!nextProps.disabled)
     this.value(nextProps.state)
+    this.disabled(nextProps.disabled) if nextProps.disabled === true or nextProps.disabled === false
 
   _prop: (key) ->
     if typeof @props[key] == 'undefined'
