@@ -35,7 +35,7 @@ module.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     this.disabled(!!nextProps.disabled)
-    this.value(nextProps.state)
+    this.value(nextProps.state, nextProps)
 
   _prop: (key) ->
     if typeof @props[key] == 'undefined'
@@ -43,9 +43,12 @@ module.exports = React.createClass
     else
       @props[key]
 
-  value: (val) ->
+  value: (val, nextProps = {}) ->
+    disabled = if typeof nextProps.disabled is "undefined" then @state.disabled else nextProps.disabled
+    readonly = if typeof nextProps.readonly is "undefined" then @state.readonly else nextProps.readonly
+
     return @state.state  if typeof val is "undefined"
-    return @  if @state.disabled or @state.readonly
+    return @  if disabled or readonly
 
     return @ if @state.state == val
 
