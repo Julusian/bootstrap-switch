@@ -125,11 +125,11 @@ module.exports = React.createClass
         @_fireStateChange()
 
   _elmTrigger: (e) ->
-    elm = $ @refs.element
+    elm = $ @_element
     elm.trigger e
 
   _handleHandlers: ->
-    $(@refs.on).on "click.bootstrapSwitch", (event) =>
+    $(@_on).on "click.bootstrapSwitch", (event) =>
       event.preventDefault()
       event.stopPropagation()
 
@@ -138,7 +138,7 @@ module.exports = React.createClass
       @_changeState false
       @_elmTrigger "focus.bootstrapSwitch"
 
-    $(@refs.off).on "click.bootstrapSwitch", (event) =>
+    $(@_off).on "click.bootstrapSwitch", (event) =>
       event.preventDefault()
       event.stopPropagation()
 
@@ -151,11 +151,11 @@ module.exports = React.createClass
     init = =>
       @_width => @_containerPosition null
 
-    if $(@refs.wrapper).is ":visible"
+    if $(@_wrapper).is ":visible"
       init()
     else
       initInterval = window.setInterval =>
-        if $(@refs.wrapper).is ":visible"
+        if $(@_wrapper).is ":visible"
           init()
           window.clearInterval initInterval
       , 50
@@ -165,9 +165,9 @@ module.exports = React.createClass
     @_elementHandlers()
 
   _width: (callback) ->
-    $on = $(@refs.on)
-    $off = $(@refs.off)
-    $label = $(@refs.label)
+    $on = $(@_on)
+    $off = $(@_off)
+    $label = $(@_label)
     $handles = $on.add($off)
 
     # remove width from inline style
@@ -210,7 +210,7 @@ module.exports = React.createClass
         offset: if @_prop('inverse') then values[0] else values[1]
 
   _elementHandlers: ->
-    $element = $ @refs.element
+    $element = $ @_element
     $element.on
       "change.bootstrapSwitch": (e, skip) =>
         e.preventDefault()
@@ -245,7 +245,7 @@ module.exports = React.createClass
 
 
   _labelHandlers: ->
-    $label = $(@refs.label)
+    $label = $(@_label)
     $label.on
       "click": (e) ->
         e.stopPropagation()
@@ -311,11 +311,11 @@ module.exports = React.createClass
       classes.push "#{@_prop('baseClass')}-focused" if @state.focus
       classes.join " "
 
-    onElm = <span ref="on" style={{ width: @state.handleWidth }}
+    onElm = <span ref={(c) => @_on= c} style={{ width: @state.handleWidth }}
       className={"#{@_prop('baseClass')}-handle-on #{@_prop('baseClass')}-#{@_prop('onColor')}"}>
         { @_prop('onText') }
       </span>
-    offElm = <span ref="off" style={{ width: @state.handleWidth }}
+    offElm = <span ref={(c) => @_off = c} style={{ width: @state.handleWidth }}
       className={"#{@_prop('baseClass')}-handle-off #{@_prop('baseClass')}-#{@_prop('offColor')}"}>
         { @_prop('offText') }
       </span>
@@ -326,12 +326,12 @@ module.exports = React.createClass
       containerWidth = wrapperWidth = "auto"
 
     return (
-      <div className={ wrapperClass } ref="wrapper" style={{width:wrapperWidth}}>
-        <div className={ "#{@_prop('baseClass')}-container" } ref="container" style={{width:containerWidth, marginLeft:@state.offset}}>
+      <div className={ wrapperClass } ref={(c) => @_wrapper = c} style={{width:wrapperWidth}}>
+        <div className={ "#{@_prop('baseClass')}-container" } ref={(c) => @_container = c} style={{width:containerWidth, marginLeft:@state.offset}}>
           {if @_prop('inverse') then offElm else onElm}
-          <span className={"#{@_prop('baseClass')}-label"} style={{width:@state.labelWidth}} ref="label">{ @_prop('labelText') }</span>
+          <span className={"#{@_prop('baseClass')}-label"} style={{width:@state.labelWidth}} ref={(c) => @_label = c}>{ @_prop('labelText') }</span>
           {if @_prop('inverse') then onElm else offElm}
-          <input type="checkbox" ref="element" />
+          <input type="checkbox" ref={(c) => @_element = c} />
         </div>
       </div>
     )
