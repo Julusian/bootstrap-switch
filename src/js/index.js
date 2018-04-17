@@ -315,7 +315,7 @@ export default class Switch extends React.Component {
   }
 
   render() {
-    const { baseClass, inverse } = this.props;
+    const { baseClass, inverse, wrapperProps } = this.props;
     const { handleWidth, labelWidth, offset } = this.state;
   
     const onHandle = this._renderOnHandle();
@@ -341,7 +341,7 @@ export default class Switch extends React.Component {
     };
 
     return (
-      <div {...wrapperParams}>
+      <div {...wrapperParams} {...wrapperProps}>
         <div {...containerParams}>
           { inverse ? offHandle : onHandle}
           { this._renderLabel() }
@@ -425,7 +425,8 @@ Switch.defaultProps = {
 
   tristate:       false,
   defaultValue:   true,
-  value:          undefined
+  value:          undefined,
+  wrapperProps:   undefined,
 };
 
 Switch.propTypes = {
@@ -459,4 +460,5 @@ Switch.propTypes = {
   defaultValue:   PropTypes.bool,
   value:          PropTypes.bool,
   onChange:       PropTypes.func,
+  wrapperProps:   PropTypes.object,
 };
