@@ -22,18 +22,17 @@ export default class Switch extends React.Component {
     this._recalculateWidth();
   }
 
-  componentWillReceiveProps(nextProps){
-    const newValue = nextProps.value !== undefined ? nextProps.value : this.state.value;
-    const oldValue = this.state.value;
+  componentDidUpdate(prevProps, prevState){
+    const { value, labelWidth, handleWidth } = this.props
+    const { value: oldValue, labelWidth: oldLabelWidth, handleWidth: oldHandleWidth } = this.state
+    const newValue = value !== undefined ? value : oldValue;
 
     // ensure width is updated
-    this.setState({
-      labelWidth: nextProps.labelWidth,
-      handleWidth: nextProps.handleWidth,
-      value: newValue
-    }, () => {
-      this._recalculateWidth(newValue == oldValue);
-    });
+    if (value !== oldValue || labelWidth !== oldLabelWidth || handleWidth !== oldHandleWidth) {
+      this.setState({ labelWidth, handleWidth, value }, () => {
+        this._recalculateWidth(newValue == oldValue);
+      });
+    }
   }
 
   _getValue(){
